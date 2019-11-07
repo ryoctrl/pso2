@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer');
 const PSO2_URL = 'http://pso2.jp/players/boost/';
+const moment = require('moment');
 
 (async () => {
     const browser = await puppeteer.launch();
@@ -10,17 +11,13 @@ const PSO2_URL = 'http://pso2.jp/players/boost/';
 
     const today = moment().set({hour:0,minute:0,second:0,millisecond:0});
     emergencies.map((emergency, index)=> {
-        if(!emergency) return;
-        const date = today.add(index * 30, 'minutes');
+        if(!emergency || index === emergencies.length -1) return;
+        if(index === 0) {
+            return console.log('本日の緊急一覧');
+        }
+        const delay = (index - 1) * 30;
+        const date = today.add(delay, 'minutes');
         console.log(date.format('HH:mm'), emergency)
         today.set({hour:0,minute:0,second:0,millisecond:0});
     });
-})();
-(async () => {
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-  await page.goto('https://example.com');
-  await page.screenshot({path: 'example.png'});
-
-  await browser.close();
 })();
